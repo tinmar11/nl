@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Évolution des Médias Digitaux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: rgb(248, 250, 252);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: rgb(30, 41, 59);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: rgb(71, 85, 105);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: bold;
+        }
+
+        .stat-title {
+            font-weight: 600;
+            color: rgb(51, 65, 85);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-subtitle {
+            color: rgb(100, 116, 139);
+            font-size: 0.875rem;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgb(30, 41, 59);
+        }
+
+        .stat-item {
+            border-left: 4px solid;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: rgb(30, 41, 59);
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            height: 16rem;
+            position: relative;
+        }
+
+        /* Innovations */
+        .innovations {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .innovations-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgb(30, 41, 59);
+            margin-bottom: 1.5rem;
+        }
+
+        .innovations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .innovations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .innovation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .innovation-icon {
+            font-size: 1.5rem;
+            color: #0088FE;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        .innovation-content h3 {
+            font-weight: 600;
+            color: rgb(51, 65, 85);
+            margin-bottom: 0.25rem;
+        }
+
+        .innovation-content p {
+            color: rgb(100, 116, 139);
+            font-size: 0.875rem;
+        }
+
+        /* Colors */
+        .blue { color: #2563EB; }
+        .green { color: #16A34A; }
+        .purple { color: #9333EA; }
+        .blue-border { border-color: #2563EB; }
+        .purple-border { border-color: #9333EA; }
+        .green-border { border-color: #16A34A; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>L'Évolution des Médias Digitaux</h1>
+            <p>Convergence du DOOH, de la RA et du Cinéma 2.0</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-brain stat-icon blue"></i>
+                    <span class="stat-value blue">85%</span>
+                </div>
+                <div class="stat-title">Taux de mémorisation</div>
+                <div class="stat-subtitle">vs 25% en TV</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-chart-line stat-icon green"></i>
+                    <span class="stat-value green">+45%</span>
+                </div>
+                <div class="stat-title">Impact notoriété</div>
+                <div class="stat-subtitle">Augmentation de la notoriété de marque</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-star stat-icon purple"></i>
+                    <span class="stat-value purple">+32%</span>
+                </div>
+                <div class="stat-title">Croissance</div>
+                <div class="stat-subtitle">Investissements publicitaires en 2023</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <div class="section-card">
+                <div class="section-header">
+                    <i class="fas fa-mobile-alt section-icon blue"></i>
+                    <h2 class="section-title">DOOH Programmatique</h2>
+                </div>
+                <div class="stat-item blue-border">
+                    <div class="stat-value blue">+95%</div>
+                    <div class="stat-subtitle">Croissance en 2023</div>
+                </div>
+                <div class="stat-item blue-border">
+                    <div class="stat-value blue">+28%</div>
+                    <div class="stat-subtitle">ROI vs. traditionnel</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <i class="fas fa-eye section-icon purple"></i>
+                    <h2 class="section-title">Réalité Augmentée</h2>
+                </div>
+                <div class="stat-item purple-border">
+                    <div class="stat-value purple">+175%</div>
+                    <div class="stat-subtitle">Taux d'engagement</div>
+                </div>
+                <div class="stat-item purple-border">
+                    <div class="stat-value purple">+70%</div>
+                    <div class="stat-subtitle">Mémorisation publicitaire</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <i class="fas fa-desktop section-icon green"></i>
+                    <h2 class="section-title">Cinéma 2.0</h2>
+                </div>
+                <div class="stat-item green-border">
+                    <div class="stat-value green">85%</div>
+                    <div class="stat-subtitle">Taux de mémorisation</div>
+                </div>
+                <div class="stat-item green-border">
+                    <div class="stat-value green">+45%</div>
+                    <div class="stat-subtitle">Impact notoriété</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 class="chart-title">Impact des Publicités Interactives</h3>
+                <div class="chart-container">
+                    <canvas id="interactiveChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Perceptions de l'IA dans les Médias</h3>
+                <div class="chart-container">
+                    <canvas id="perceptionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Innovations Section -->
+        <div class="innovations">
+            <h2 class="innovations-title">Innovations Majeures</h2>
+            <div class="innovations-grid">
+                <div class="innovation-item">
+                    <i class="fas fa-qrcode innovation-icon"></i>
+                    <div class="innovation-content">
+                        <h3>QR Codes Dynamiques</h3>
+                        <p>Connexion expérience cinéma-digital</p>
+                    </div>
+                </div>
+
+                <div class="innovation-item">
+                    <i class="fas fa-brain innovation-icon"></i>
+                    <div class="innovation-content">
+                        <h3>IA & Personnalisation</h3>
+                        <p>Contenu adapté aux spectateurs</p>
+                    </div>
+                </div>
+
+                <div class="innovation-item">
+                    <i class="fas fa-users innovation-icon"></i>
+                    <div class="innovation-content">
+                        <h3>Engagement Interactif</h3>
+                        <p>Expériences participatives</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive Chart
+        const interactiveCtx = document.getElementById('interactiveChart');
+        new Chart(interactiveCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Formats Standards', 'Publicités Interactives'],
+                datasets: [{
+                    label: 'Taux de Mémorisation',
+                    data: [100, 136],
+                    backgroundColor: '#0088FE',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Perceptions Chart
+        const perceptionsCtx = document.getElementById('perceptionsChart');
+        new Chart(perceptionsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Amélioration Engagement', 'Risque Erreurs'],
+                datasets: [{
+                    data: [53, 60],
+                    backgroundColor: [
+                        '#0088FE',
+                        '#00C49F'
+                    ],
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
